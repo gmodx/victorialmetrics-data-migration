@@ -30,19 +30,23 @@ RUN mkdir -p /var/log/supervisor && chmod -R o+rw /var/log/supervisor && \
     mkdir -p /run && chmod -R o+rw /run && \
     mkdir -p /app && chmod -R o+rw /app
 
-COPY *.yml /app/
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY programs/*.yml /app/programs/
+COPY programs/*.sh /app/programs/
 COPY *.sh /app/
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-ENV PROM_STORAGE_DAYS=365
-ENV PROM_QUERY_MAX_SAMPLES=50000000
-ENV PROM_STORAGE_DIR=/prometheus_data
-ENV PROM_LISTEN_PORT=2090
+ENV INTERNAL_PROM_STORAGE_DAYS=365
+ENV INTERNAL_PROM_QUERY_MAX_SAMPLES=50000000
+ENV INTERNAL_PROM_STORAGE_DIR=/prometheus_data
+ENV INTERNAL_PROM_LISTEN_PORT=2090
 
-ENV VM_STORAGE_DAYS=365
-ENV VM_QUERY_MAX_SAMPLES=50000000
-ENV VM_MAX_CONCURRENT_REQUESTS=4
-ENV VM_LISTEN_PORT=3090
-ENV VM_STORAGE_DIR=/vm_data
+ENV INTERNAL_VM_STORAGE_DAYS=365
+ENV INTERNAL_VM_QUERY_MAX_SAMPLES=50000000
+ENV INTERNAL_VM_MAX_CONCURRENT_REQUESTS=4
+ENV INTERNAL_VM_LISTEN_PORT=3090
+ENV INTERNAL_VM_STORAGE_DIR=/vm_data
 
+ENV REMOTE_VM_ADDR=172.17.0.1:8428
+
+WORKDIR /app/
 ENTRYPOINT ["/usr/bin/supervisord"]
