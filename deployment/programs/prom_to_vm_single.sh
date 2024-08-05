@@ -1,16 +1,29 @@
 #!/bin/bash
 
-VICTORIA_METRICS_URL="http://localhost:8428"
+BASEDIR=$(dirname $0)
+. ${BASEDIR}/../scripts/lib_echo.sh
 
-echo "Importing Prometheus data to VictoriaMetrics..."
+# create prometheus snapshot
+echo_green_bold "Create Prometheus data snapshot"
+response=$(curl -s -X POST "localhost:${INTERNAL_PROM_LISTEN_PORT}/api/v1/admin/tsdb/snapshot")
+if [ $? -ne 0 ]; then
+    echo_red "request failed"
+    exit 1
+fi
 
-vmctl import \
-    --prometheusDataDir="$INTERNAL_PROM_STORAGE_DIR" \
-    --victoriaMetricsUrl="$REMOTE_VM_ADDR"
+SNAPSHOT_NAME=$(echo "$response" | jq -r '.data.name')
+SNAPSHOT_PATH="${INTERNAL_PROM_STORAGE_DIR}/snapshots/${SNAPSHOT_NAME}/"
+echo -e "Prometheus snapshot path: $SNAPSHOT_PATH\n"
+
+# import data to vm
+echo_green_bold "Importing Prometheus data to VictoriaMetrics"
+echo_and_run "vmctl prometheus --vm-addr=\"$REMOTE_VM_ADDR\" --prom-snapshot=\"$SNAPSHOT_PATH\""
 
 if [ $? -eq 0 ]; then
     echo "Data imported successfully."
+    echo "Press Ctrl+C to exit."
 else
-    echo "Failed to import data."
+    echo_red "Failed to import data."
+    echo "Press Ctrl+C to exit."
     exit 1
 fi

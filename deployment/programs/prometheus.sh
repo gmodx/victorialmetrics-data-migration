@@ -8,4 +8,5 @@ exec prometheus \
 --config.file=/app/programs/prometheus.yml \
 --storage.tsdb.path=${INTERNAL_PROM_STORAGE_DIR} \
 --web.listen-address=":${INTERNAL_PROM_LISTEN_PORT}" \
+--web.enable-admin-api \
 --storage.tsdb.retention.time=${INTERNAL_PROM_STORAGE_DAYS}d

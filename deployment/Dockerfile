@@ -20,6 +20,7 @@ RUN apt update && \
     wget \
     curl \
     tzdata \
+    jq \
     supervisor \
     && \
     apt-get autoremove -y && \
@@ -32,6 +33,7 @@ RUN mkdir -p /var/log/supervisor && chmod -R o+rw /var/log/supervisor && \
 
 COPY programs/*.yml /app/programs/
 COPY programs/*.sh /app/programs/
+COPY scripts/*.sh /app/scripts/
 COPY *.sh /app/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
