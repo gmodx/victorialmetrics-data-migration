@@ -8,5 +8,5 @@ docker run --rm \
 -p 0.0.0.0:2090:2090 \
 -p 0.0.0.0:3090:3090 \
 -e REMOTE_VM_WRITE_ADDR=http://10.12.210.25:30090 \
-victorialmetrics-data-migration:latest
+ghcr.io/gmodx/victorialmetrics-data-migration:latest
 ```
