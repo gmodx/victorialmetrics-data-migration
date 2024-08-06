@@ -1,5 +1,5 @@
 FROM victoriametrics/victoria-metrics:v1.101.0 as vm-img
-FROM victoriametrics/vmctl:v1.101.0 as vmctl-img
+FROM victoriametrics/vmctl:v1.102.1 as vmctl-img
 FROM prom/prometheus:v2.36.1 as prom-img
 FROM ubuntu:20.04
 

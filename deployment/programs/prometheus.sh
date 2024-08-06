@@ -9,4 +9,6 @@ exec prometheus \
 --storage.tsdb.path=${INTERNAL_PROM_STORAGE_DIR} \
 --web.listen-address=":${INTERNAL_PROM_LISTEN_PORT}" \
 --web.enable-admin-api \
+--web.console.libraries=/usr/share/prometheus/console_libraries \
+--web.console.templates=/usr/share/prometheus/consoles \
 --storage.tsdb.retention.time=${INTERNAL_PROM_STORAGE_DAYS}d
