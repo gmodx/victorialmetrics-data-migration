@@ -5,7 +5,7 @@
 echo_green_bold "Start to run local prometheus service"
 supervisorctl start prometheus
 
-echo_green_bold "\nImporting Prometheus data to VictoriaMetrics(single) in background."
+echo_green_bold "\nImporting Prometheus data to VictoriaMetrics in background."
 supervisorctl start prom-to-vm-single
 
 echo_bold "Log file at /var/log/prom_to_vm_single.log\n"

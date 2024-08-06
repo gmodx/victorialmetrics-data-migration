@@ -17,7 +17,7 @@ echo -e "Prometheus snapshot path: $SNAPSHOT_PATH\n"
 
 # import data to vm
 echo_green_bold "Importing Prometheus data to VictoriaMetrics"
-echo_and_run "vmctl prometheus -s --disable-progress-bar=true --vm-addr=\"$REMOTE_VM_ADDR\" --prom-snapshot=\"$SNAPSHOT_PATH\""
+echo_and_run "vmctl prometheus -s --disable-progress-bar=true --vm-addr=\"$REMOTE_VM_WRITE_ADDR\" --prom-snapshot=\"$SNAPSHOT_PATH\""
 
 if [ $? -eq 0 ]; then
     echo_bold "\nData imported successfully."
