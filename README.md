@@ -1,10 +1,12 @@
-# victorialmetrics-data-migration
+# VictoriaMetrics Data Migration
 
-## env
+## Environment
 
 | Name    | Comments |
 | -------- | ------- |
 | REMOTE_VM_WRITE_ADDR | VictorialMetrics remote write address |
+
+This project is used to migrate Prometheus data to a VictoriaMetrics cluster. It requires setting the REMOTE_VM_WRITE_ADDR environment variable to specify the write address of the target VictoriaMetrics cluster.
 
 ## Data Migration
 
