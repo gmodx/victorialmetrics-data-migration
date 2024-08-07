@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: victorialmetrics-data-migration
+  labels:
+    app: victorialmetrics-data-migration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: victorialmetrics-data-migration
+  template:
+    metadata:
+      labels:
+        app: victorialmetrics-data-migration
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - your-vm-pod
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: victorialmetrics-data-migration
+        image: ghcr.io/gmodx/victorialmetrics-data-migration:latest
+        env:
+        - name: REMOTE_VM_WRITE_ADDR
+          value: "http://your-vm:9090"
+        resources:
+          requests:
+            cpu: "2"
+            memory: 8Gi
+          limits:
+            cpu: "4"
+            memory: 16Gi
+        volumeMounts:
+        - name: localtime
+          mountPath: /etc/localtime
+        - name: prometheus-data
+          mountPath: /prometheus_data
+        - name: vmdata
+          mountPath: /vm_data
+      volumes:
+      - name: localtime
+        hostPath:
+          path: /etc/localtime
+      - name: prometheus-data
+        hostPath:
+          path: /tmp/volumes/prometheus
+          type: Directory
+      - name: vmdata
+        hostPath:
+          path: /tmp/vm_single_backup
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: victorialmetrics-data-migration
+  labels:
+    app: victorialmetrics-data-migration
+spec:
+  type: NodePort
+  ports:
+  - name: vm-migration-prom-port
+    port: 2090
+    targetPort: 2090
+    protocol: TCP
+    nodePort: 30290
+  - name: vm-migration-vm-native-port
+    port: 3090
+    targetPort: 3090
+    protocol: TCP
+    nodePort: 30390
+  selector:
+    app: victorialmetrics-data-migration
