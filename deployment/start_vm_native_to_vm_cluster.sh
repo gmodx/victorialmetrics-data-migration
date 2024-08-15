@@ -2,6 +2,12 @@
 
 . ./scripts/lib_echo.sh
 
+## backup old log file
+if [ -f "/var/log/vm_native_to_vm_cluster.log" ]; then
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    mv /var/log/vm_native_to_vm_cluster.log /var/log/vm_native_to_vm_cluster_$timestamp.log
+fi
+
 echo_green_bold "Start to run local vm-native service"
 supervisorctl start vm-native
 
